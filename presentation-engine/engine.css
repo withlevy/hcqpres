@@ -33,7 +33,7 @@
   /* Flywheel physics — asymmetric in/out for physical tape wipe */
   --wipe-ease-in:  cubic-bezier(0.22, 1, 0.36, 1);   /* deceleration: heavy object arriving */
   --wipe-ease-out: cubic-bezier(0.55, 0, 1, 0.45);    /* acceleration: heavy object departing */
-  --wipe-duration: 1.05s;
+  --wipe-duration: 1.8s;
 
   --hfs: var(--sp-8); /* scaled up for LED stage impact */
 }
