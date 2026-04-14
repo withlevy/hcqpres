@@ -1,17 +1,32 @@
 // --- GENERATE WIPE TAPES ---
-// Create 20 tapes per rotator (10.2vmax each = 204vmax) for dual-axis woven grid coverage
+// 28 tapes per rotator in 3 size classes (lg/md/sm) for varied-height woven grid coverage
 document.addEventListener('DOMContentLoaded', () => {
     const rotatorA = document.getElementById('wipe-rotator-a');
     const rotatorB = document.getElementById('wipe-rotator-b');
-    for (let i = 0; i < 20; i++) {
+
+    const sizePattern = ['wt-lg', 'wt-sm', 'wt-md', 'wt-sm', 'wt-lg', 'wt-md', 'wt-sm', 'wt-md'];
+    const tapesPerRotator = 28;
+    const staggerStep = 0.018; // seconds between each tape's animation start
+
+    for (let i = 0; i < tapesPerRotator; i++) {
         const isEven = i % 2 === 0;
+        const sizeClass = sizePattern[i % sizePattern.length];
+
         [rotatorA, rotatorB].forEach(rotator => {
             const tape = document.createElement('div');
-            tape.className = `wipe-tape ${isEven ? 'even tape-white' : 'odd tape-carbon'}`;
+            tape.className = `wipe-tape ${sizeClass} ${isEven ? 'even tape-white' : 'odd tape-carbon'}`;
             tape.innerHTML = `<div class="ticker-track ${isEven ? 'reverse' : ''}"><span></span><span></span></div>`;
+
+            // Center-out stagger: tapes near center fire first, edges last
+            const distFromCenter = Math.abs(i - (tapesPerRotator / 2));
+            const delay = distFromCenter * staggerStep;
+            tape.style.animationDelay = `${delay.toFixed(3)}s`;
+
             rotator.appendChild(tape);
         });
     }
+
+    createAmbientMarginalia();
     updateTickerContent();
     initContinuousTickers();
 
@@ -21,47 +36,113 @@ document.addEventListener('DOMContentLoaded', () => {
     presentation.setAttribute('data-slide-bg', initDark ? 'dark' : 'light');
 });
 
+// --- AMBIENT MARGINALIA GENERATOR ---
+function createAmbientMarginalia() {
+    const wrapper = document.querySelector('.ambient-marginalia-wrapper');
+    if (!wrapper) return;
+
+    const phrases = [
+        'what matters is people',
+        'the future of work starts here',
+        'skills are the new currency',
+        'invest in human capital',
+    ];
+
+    const classes = ['marg-1', 'marg-2', 'marg-3', 'marg-4'];
+
+    classes.forEach((cls, i) => {
+        const el = document.createElement('div');
+        el.className = `ambient-marginalia ${cls}`;
+        el.textContent = phrases[i % phrases.length];
+        wrapper.appendChild(el);
+    });
+}
+
 // --- JAVASCRIPT ANIMATION ENGINE ---
 let tickerAnims = [];
 let decayInterval = null;
+let spinUpInterval = null;
 
 function initContinuousTickers() {
     // Skip all ticker motion when the user prefers reduced motion
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    // Ambient + wipe ticker tracks
     const tracks = document.querySelectorAll('.tape-ambient .ticker-track, .wipe-tape .ticker-track');
     if (!tracks.length) return;
+
+    // Expanded duration pool for 8 ambient tapes — more variation, all very slow
+    const durations = [720000, 840000, 600000, 900000, 660000, 780000, 540000, 810000];
+
     tracks.forEach((track, index) => {
-        // Crawl speeds (extremely slow base)
-        const durations = [600000, 750000, 550000, 650000];
         const isReverse = track.classList.contains('reverse');
         let anim = track.animate([
             { transform: isReverse ? 'translateX(-50%)' : 'translateX(0)' },
             { transform: isReverse ? 'translateX(0)' : 'translateX(-50%)' }
-        ], { duration: durations[index % 4], iterations: Infinity });
+        ], { duration: durations[index % durations.length], iterations: Infinity });
+        tickerAnims.push(anim);
+    });
+
+    // Marginalia: horizontal drift across the full viewport width
+    const margElements = document.querySelectorAll('.ambient-marginalia');
+    const margDurations = [85000, 110000, 95000, 75000];
+
+    margElements.forEach((el, index) => {
+        const isReverse = index % 2 === 1;
+        let anim = el.animate([
+            { transform: `translateX(${isReverse ? '100vw' : '-100vw'})` },
+            { transform: `translateX(${isReverse ? '-100vw' : '100vw'})` }
+        ], { duration: margDurations[index % margDurations.length], iterations: Infinity });
         tickerAnims.push(anim);
     });
 }
 
+// Flywheel physics: asymmetric spin-up / wind-down for heavy-object momentum
 function burstSpeed() {
     if (!tickerAnims.length) return;
     if (decayInterval) clearInterval(decayInterval);
-    
-    tickerAnims.forEach(anim => {
-        anim.playbackRate = 50; 
-    });
-    
-    decayInterval = setInterval(() => {
-        let allDone = true;
-        tickerAnims.forEach(anim => {
-            anim.playbackRate *= 0.94; 
-            if(anim.playbackRate > 1.05) allDone = false;
-            else anim.playbackRate = 1;
-        });
-        if(allDone) {
-            clearInterval(decayInterval);
-            decayInterval = null;
+    if (spinUpInterval) clearInterval(spinUpInterval);
+
+    const peakRate = 60;
+    const spinUpDuration = 180;   // ms to reach peak (fast spin-up)
+    const spinUpSteps = 6;
+    const spinUpTick = spinUpDuration / spinUpSteps;
+
+    let step = 0;
+
+    // Phase 1: Spin-up — easeOutExpo ramp to peak
+    spinUpInterval = setInterval(() => {
+        step++;
+        const t = step / spinUpSteps;
+        const rate = peakRate * (1 - Math.pow(2, -10 * t));
+        tickerAnims.forEach(anim => { anim.playbackRate = rate; });
+
+        if (step >= spinUpSteps) {
+            clearInterval(spinUpInterval);
+            spinUpInterval = null;
+            tickerAnims.forEach(anim => { anim.playbackRate = peakRate; });
+
+            // Phase 2: Wind-down — exponential decay + linear drag (heavy flywheel friction)
+            let elapsed = 0;
+            const decayTick = 40;
+            const halfLife = 600; // ms — time to reach half speed
+
+            decayInterval = setInterval(() => {
+                elapsed += decayTick;
+                const decayFactor = Math.exp(-0.693 * elapsed / halfLife);
+                const linearDrag = Math.max(0, 1 - (elapsed / 4000));
+                const rate = Math.max(1, peakRate * decayFactor * (0.7 + 0.3 * linearDrag));
+
+                tickerAnims.forEach(anim => { anim.playbackRate = rate; });
+
+                if (rate <= 1.02) {
+                    tickerAnims.forEach(anim => { anim.playbackRate = 1; });
+                    clearInterval(decayInterval);
+                    decayInterval = null;
+                }
+            }, decayTick);
         }
-    }, 50);
+    }, spinUpTick);
 }
 
 // --- PRESENTATION CONTROLS ---
@@ -109,23 +190,23 @@ function toggleAmbient() {
   // 1. Fire the wipe curtain to cover the screen
   wipeOverlay.classList.add('active');
   wipeOverlay.classList.add('wiping-in');
-  burstSpeed(); // Fire the hyper speed tape crawl
+  burstSpeed(); // Fire the flywheel speed burst
 
   setTimeout(() => {
-      // 2. Midpoint: Screen is completely covered by tapes. Swap modes underneath.
+      // 2. Midpoint: all tapes on screen. Swap modes underneath.
       presentation.classList.toggle('ambient');
-      
+
       // 3. Fire the wipe out
       wipeOverlay.classList.remove('wiping-in');
       wipeOverlay.classList.add('wiping-out');
-      
+
       setTimeout(() => {
           // 4. Cleanup
           wipeOverlay.classList.remove('wiping-out');
           wipeOverlay.classList.remove('active');
           isWiping = false;
-      }, 950); 
-  }, 900); 
+      }, 1100); // wipe-duration (1050) + buffer (50)
+  }, 1100);   // wipe-duration (1050) + max stagger (252) - overlap (200)
 }
 
 function toggleFullScreen() {

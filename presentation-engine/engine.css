@@ -25,6 +25,16 @@
   --sp-8: calc(var(--baseline) * 8);    
   --sp-12: calc(var(--baseline) * 12);  
 
+  /* Ambient strata depth tokens */
+  --stratum-deep-opacity: 0.35;
+  --stratum-mid-opacity: 0.70;
+  --stratum-fore-opacity: 0.95;
+
+  /* Flywheel physics — asymmetric in/out for physical tape wipe */
+  --wipe-ease-in:  cubic-bezier(0.22, 1, 0.36, 1);   /* deceleration: heavy object arriving */
+  --wipe-ease-out: cubic-bezier(0.55, 0, 1, 0.45);    /* acceleration: heavy object departing */
+  --wipe-duration: 1.05s;
+
   --hfs: var(--sp-8); /* scaled up for LED stage impact */
 }
 
@@ -171,20 +181,42 @@ ul.agenda-list li { display: flex; align-items: baseline; margin-bottom: var(--s
 }
 #presentation.ambient .ambient-bg { opacity: 1; z-index: 25; }
 
-.ambient-color-1, .ambient-color-2 { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1;}
-.ambient-color-1 { background: var(--blue); animation: fadeBlue 24s infinite; }
-.ambient-color-2 { background: var(--red); animation: fadeRed 24s infinite; }
+/* Cinematic Color Wash — radial gradients with screen blend on carbon */
+.ambient-color-1, .ambient-color-2 {
+  position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1;
+  mix-blend-mode: screen;
+}
+.ambient-color-1 {
+  background: radial-gradient(ellipse 120% 80% at 20% 30%, var(--blue) 0%, transparent 70%);
+  animation: washBlue 30s ease-in-out infinite;
+}
+.ambient-color-2 {
+  background: radial-gradient(ellipse 100% 100% at 80% 70%, var(--red) 0%, transparent 60%);
+  animation: washRed 30s ease-in-out infinite;
+}
 
-@keyframes fadeBlue { 0%, 25% { opacity: 1; } 30%, 100% { opacity: 0; } }
-@keyframes fadeRed { 0%, 30% { opacity: 0; } 35%, 60% { opacity: 1; } 65%, 100% { opacity: 0; } }
+@keyframes washBlue {
+  0%   { opacity: 0.6; transform: translate(0%, 0%) scale(1); }
+  25%  { opacity: 0.9; transform: translate(10%, -5%) scale(1.15); }
+  50%  { opacity: 0.3; transform: translate(-5%, 8%) scale(0.9); }
+  75%  { opacity: 0.7; transform: translate(5%, -3%) scale(1.1); }
+  100% { opacity: 0.6; transform: translate(0%, 0%) scale(1); }
+}
+@keyframes washRed {
+  0%   { opacity: 0.3; transform: translate(0%, 0%) scale(1.1); }
+  25%  { opacity: 0.1; transform: translate(-8%, 5%) scale(0.95); }
+  50%  { opacity: 0.8; transform: translate(5%, -5%) scale(1.2); }
+  75%  { opacity: 0.5; transform: translate(-3%, 3%) scale(1); }
+  100% { opacity: 0.3; transform: translate(0%, 0%) scale(1.1); }
+}
 
-/* Solid Knockout White Anchor Text */
+/* Solid Knockout White Anchor Text — sits between mid (z-3) and fore (z-5) */
 .ambient-static-text {
   position: absolute; top: 50%; left: 0; padding-left: var(--sp-6);
   transform: translateY(-50%); width: 100%;
   font-family: var(--sys); font-weight: 900; text-align: left; text-transform: uppercase; letter-spacing: -0.04em;
   font-size: 14cqi; line-height: 0.85;
-  color: var(--white); opacity: 1; z-index: 3;
+  color: var(--white); opacity: 1; z-index: 4;
 }
 
 /* Tape Core Styling */
@@ -194,22 +226,88 @@ ul.agenda-list li { display: flex; align-items: baseline; margin-bottom: var(--s
 .ticker-track { display: flex; width: max-content; }
 .ticker-track span { padding: 0; flex-shrink: 0; }
 
-/* The 4 Continuous Ambient Tapes */
+/* ---- Three-Stratum Ambient Tape Architecture ---- */
 .ambient-tickers-wrapper {
-  position: absolute; top: 50%; left: 50%; width: 200vmax; height: 200vmax;
+  position: absolute; top: 50%; left: 50%; width: 250vmax; height: 250vmax;
   transform: translate(-50%, -50%);
 }
-.z-back { z-index: 2; }
-.z-front { z-index: 4; }
 
 .tape-ambient {
   position: absolute; left: 0; width: 100%; display: flex;
   font-family: var(--mono); font-weight: 400; white-space: nowrap; text-transform: uppercase; letter-spacing: 0.15em;
 }
-.tape-c1 { top: 35%; transform: rotate(-45deg); font-size: 2.2cqi; padding: 1.2cqi 0; opacity: 0.95; }
-.tape-c2 { top: 65%; transform: rotate(45deg); font-size: 1.2cqi; padding: 0.8cqi 0; opacity: 0.85; }
-.tape-c3 { top: 75%; transform: rotate(-45deg); font-size: 2.8cqi; padding: 1.5cqi 0; opacity: 0.95; }
-.tape-c4 { top: 40%; transform: rotate(45deg); font-size: 1cqi; padding: 0.5cqi 0; opacity: 0.8; }
+
+/* Stratum 1: DEEP BACKGROUND — large, slow, atmospheric haze */
+.z-deep { z-index: 2; }
+
+.tape-d1 {
+  top: 25%; transform: rotate(-45deg);
+  font-size: calc(var(--baseline) * 2.5); padding: calc(var(--baseline) * 1.5) 0;
+  opacity: var(--stratum-deep-opacity);
+}
+.tape-d2 {
+  top: 70%; transform: rotate(45deg);
+  font-size: calc(var(--baseline) * 2); padding: calc(var(--baseline) * 1) 0;
+  opacity: calc(var(--stratum-deep-opacity) - 0.05);
+}
+
+/* Stratum 2: MIDGROUND — readable texture, the workhorse layer */
+.z-mid { z-index: 3; }
+
+.tape-m1 {
+  top: 40%; transform: rotate(45deg);
+  font-size: calc(var(--baseline) * 1.5); padding: calc(var(--baseline) * 0.75) 0;
+  opacity: var(--stratum-mid-opacity);
+}
+.tape-m2 {
+  top: 55%; transform: rotate(-45deg);
+  font-size: calc(var(--baseline) * 1); padding: calc(var(--baseline) * 0.5) 0;
+  opacity: calc(var(--stratum-mid-opacity) - 0.10);
+}
+.tape-m3 {
+  top: 82%; transform: rotate(45deg);
+  font-size: calc(var(--baseline) * 1.25); padding: calc(var(--baseline) * 0.5) 0;
+  opacity: calc(var(--stratum-mid-opacity) - 0.05);
+}
+
+/* Stratum 3: EXTREME FOREGROUND — small, crisp, high-contrast intimacy */
+.z-fore { z-index: 5; }
+
+.tape-f1 {
+  top: 32%; transform: rotate(-45deg);
+  font-size: calc(var(--baseline) * 0.65); padding: calc(var(--baseline) * 0.25) 0;
+  opacity: var(--stratum-fore-opacity);
+}
+.tape-f2 {
+  top: 60%; transform: rotate(45deg);
+  font-size: calc(var(--baseline) * 0.5); padding: calc(var(--baseline) * 0.25) 0;
+  opacity: calc(var(--stratum-fore-opacity) - 0.05);
+}
+.tape-f3 {
+  top: 48%; transform: rotate(-45deg);
+  font-size: calc(var(--baseline) * 0.75); padding: calc(var(--baseline) * 0.25) 0;
+  opacity: calc(var(--stratum-fore-opacity) - 0.10);
+}
+
+/* ---- Caveat Marginalia Layer — deep background human touch ---- */
+.ambient-marginalia-wrapper {
+  position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  overflow: hidden;
+}
+
+.ambient-marginalia {
+  position: absolute;
+  font-family: var(--hand);
+  color: var(--white);
+  opacity: 0.08;
+  white-space: nowrap;
+  will-change: transform;
+}
+
+.marg-1 { top: 15%; font-size: calc(var(--baseline) * 1.8); transform: rotate(-2deg); }
+.marg-2 { top: 45%; font-size: calc(var(--baseline) * 1.2); transform: rotate(1.5deg); }
+.marg-3 { top: 72%; font-size: calc(var(--baseline) * 2.2); transform: rotate(-3deg); }
+.marg-4 { top: 88%; font-size: calc(var(--baseline) * 1); transform: rotate(2deg); }
 
 /* ═══════════════════════════════════════════════
    THE FULL-SCREEN TAPE WIPE TRANSITION
@@ -222,32 +320,39 @@ ul.agenda-list li { display: flex; align-items: baseline; margin-bottom: var(--s
 
 .wipe-rotator {
   position: absolute; top: 50%; left: 50%;
-  width: 200vmax; height: 200vmax;
+  width: 250vmax; height: 250vmax;
   display: flex; flex-direction: column; justify-content: center; gap: 0;
 }
 .wipe-rotator-a { transform: translate(-50%, -50%) rotate(45deg); }
 .wipe-rotator-b { transform: translate(-50%, -50%) rotate(-45deg); }
 
 .wipe-tape {
-  width: 100%; height: 10.2vmax;
+  width: 100%;
   display: flex; align-items: center; overflow: hidden;
   font-family: var(--mono); font-weight: 400; white-space: nowrap;
-  text-transform: uppercase; letter-spacing: 0.15em; font-size: 2.5cqi;
+  text-transform: uppercase; letter-spacing: 0.15em;
 }
 
-.wipe-tape.odd { transform: translateX(100%); }
+/* 3 size classes for visual rhythm instead of uniform 10.2vmax */
+.wipe-tape.wt-lg { height: 12vmax; font-size: calc(var(--baseline) * 2); }
+.wipe-tape.wt-md { height: 9vmax;  font-size: calc(var(--baseline) * 1.3); }
+.wipe-tape.wt-sm { height: 7vmax;  font-size: calc(var(--baseline) * 0.85); }
+
+.wipe-tape.odd  { transform: translateX(100%); }
 .wipe-tape.even { transform: translateX(-100%); }
 
-#wipe-overlay.wiping-in .wipe-tape.odd { animation: slideInOdd 0.9s cubic-bezier(0.77, 0, 0.175, 1) forwards; }
-#wipe-overlay.wiping-in .wipe-tape.even { animation: slideInEven 0.9s cubic-bezier(0.77, 0, 0.175, 1) forwards; }
+/* Wipe-in: heavy deceleration — tapes slam to a stop */
+#wipe-overlay.wiping-in .wipe-tape.odd  { animation: slideInOdd  var(--wipe-duration) var(--wipe-ease-in) forwards; }
+#wipe-overlay.wiping-in .wipe-tape.even { animation: slideInEven var(--wipe-duration) var(--wipe-ease-in) forwards; }
 
-#wipe-overlay.wiping-out .wipe-tape.odd { animation: slideOutOdd 0.9s cubic-bezier(0.77, 0, 0.175, 1) forwards; }
-#wipe-overlay.wiping-out .wipe-tape.even { animation: slideOutEven 0.9s cubic-bezier(0.77, 0, 0.175, 1) forwards; }
+/* Wipe-out: slow acceleration — heavy tapes pulling away */
+#wipe-overlay.wiping-out .wipe-tape.odd  { animation: slideOutOdd  var(--wipe-duration) var(--wipe-ease-out) forwards; }
+#wipe-overlay.wiping-out .wipe-tape.even { animation: slideOutEven var(--wipe-duration) var(--wipe-ease-out) forwards; }
 
-@keyframes slideInOdd { from { transform: translateX(100%); } to { transform: translateX(0%); } }
+@keyframes slideInOdd  { from { transform: translateX(100%); }  to { transform: translateX(0%); } }
 @keyframes slideInEven { from { transform: translateX(-100%); } to { transform: translateX(0%); } }
-@keyframes slideOutOdd { from { transform: translateX(0%); } to { transform: translateX(-100%); } }
-@keyframes slideOutEven { from { transform: translateX(0%); } to { transform: translateX(100%); } }
+@keyframes slideOutOdd  { from { transform: translateX(0%); }  to { transform: translateX(-100%); } }
+@keyframes slideOutEven { from { transform: translateX(0%); }  to { transform: translateX(100%); } }
 
 /* ═══════════════════════════════════════════════
    RESPONSIVE LOGOS
@@ -309,8 +414,15 @@ ul.agenda-list li { display: flex; align-items: baseline; margin-bottom: var(--s
   /* Pause CSS-driven ticker scrolling */
   .ticker-track { animation-play-state: paused !important; }
 
+  /* Hide marginalia drift */
+  .ambient-marginalia { display: none !important; }
+
   /* Replace sliding tape wipe with a simple opacity crossfade */
-  .wipe-tape { transform: translateX(0) !important; transition: opacity 0.35s ease !important; }
+  .wipe-tape {
+    transform: translateX(0) !important;
+    transition: opacity 0.35s ease !important;
+    animation-delay: 0s !important;
+  }
   #wipe-overlay.wiping-in .wipe-tape.odd,
   #wipe-overlay.wiping-in .wipe-tape.even {
     animation: none !important; opacity: 1;
