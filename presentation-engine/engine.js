@@ -149,14 +149,14 @@ document.addEventListener('click', (e) => {
 
 // --- PPTX GENERATION ---
 function downloadPPTX() {
-  if (typeof PptxGenJS === ‘undefined’) {
-    alert(‘Presentation library not loaded. Please check your internet connection and try again.’);
+  if (typeof PptxGenJS === 'undefined') {
+    alert('Presentation library not loaded. Please check your internet connection and try again.');
     return;
   }
   try {
   let pptx = new PptxGenJS();
-  pptx.layout = ‘LAYOUT_16x9’;
-  const cWhite = ‘F9F9F8’, cCarbon = ‘121212’, cRed = ‘E4002B’, cBlue = ‘41B6E6’;
+  pptx.layout = 'LAYOUT_16x9';
+  const cWhite = 'F9F9F8', cCarbon = '121212', cRed = 'E4002B', cBlue = '41B6E6';
 
   // Slide 1 — Title
   let s1 = pptx.addSlide(); s1.background = { color: cWhite };
@@ -197,7 +197,7 @@ function downloadPPTX() {
   s5.addText("FIRESIDE CHAT", { x: 0.5, y: 0.8, w: 9, fontFace: "Overpass", fontSize: 48, bold: true, color: cCarbon });
   s5.addText("Future of work in the capital region", { x: 0.5, y: 1.6, w: 9, fontFace: "Instrument Serif", fontSize: 24, color: cCarbon, bold: false });
   s5.addText("Clara Haskell Botstein", { x: 0.5, y: 2.2, w: 9, fontFace: "IBM Plex Sans", fontSize: 20, bold: true, color: cCarbon });
-  s5.addText("CHIEF OF STAFF, DC’S OFFICE OF THE DEPUTY MAYOR FOR EDUCATION", { x: 0.5, y: 2.5, w: 9, fontFace: "IBM Plex Mono", fontSize: 11, color: "666666", bold: false });
+  s5.addText("CHIEF OF STAFF, DC'S OFFICE OF THE DEPUTY MAYOR FOR EDUCATION", { x: 0.5, y: 2.5, w: 9, fontFace: "IBM Plex Mono", fontSize: 11, color: "666666", bold: false });
   s5.addText("in conversation with", { x: 0.5, y: 3.0, w: 9, fontFace: "Instrument Serif", fontSize: 16, italic: true, color: cCarbon, bold: false });
   s5.addText("Ann Marie Guzzi", { x: 0.5, y: 3.4, w: 9, fontFace: "IBM Plex Sans", fontSize: 20, bold: true, color: cCarbon });
   s5.addText("LEVY STRATEGIC DESIGN", { x: 0.5, y: 3.7, w: 9, fontFace: "IBM Plex Mono", fontSize: 11, color: "666666", bold: false });
@@ -219,7 +219,7 @@ function downloadPPTX() {
   let s7 = pptx.addSlide(); s7.background = { color: cBlue };
   s7.addText("2:00 PM", { x: 0, y: 1.5, w: 10, align: "center", fontFace: "IBM Plex Mono", fontSize: 18, color: cCarbon, bold: false });
   s7.addText("15 MINUTE\nBREAK", { x: 0, y: 1.8, w: 10, h: 2, align: "center", fontFace: "Overpass", fontSize: 60, bold: true, color: cCarbon });
-  s7.addText("Visit Marianne’s Cafe for DC Central Kitchen coffee!", { x: 0.5, y: 3.8, w: 9, fontFace: "Caveat", fontSize: 18, color: cRed, italic: true });
+  s7.addText("Visit Marianne's Cafe for DC Central Kitchen coffee!", { x: 0.5, y: 3.8, w: 9, fontFace: "Caveat", fontSize: 18, color: cRed, italic: true });
 
   // Slide 8 — Personal LinkedIn Optimization
   let s8 = pptx.addSlide(); s8.background = { color: cWhite };
@@ -243,12 +243,12 @@ function downloadPPTX() {
   // Slide 11 — Up Next
   let s11 = pptx.addSlide(); s11.background = { color: cCarbon };
   s11.addText("UP NEXT", { x: 0.5, y: 0.5, w: 9, fontFace: "IBM Plex Mono", fontSize: 14, color: cRed, bold: false });
-  s11.addText("The Upskilling Labs’\nShowcase Summit", { x: 0.5, y: 0.8, w: 9, h: 1.5, fontFace: "Instrument Serif", fontSize: 40, color: cWhite, bold: false });
-  s11.addText("Stay for panels on AI’s impact on climate and energy and project demos from The Upskilling Labs community.", { x: 0.5, y: 2.5, w: 8.5, h: 1.5, fontFace: "IBM Plex Sans", fontSize: 16, color: cWhite });
+  s11.addText("The Upskilling Labs'\nShowcase Summit", { x: 0.5, y: 0.8, w: 9, h: 1.5, fontFace: "Instrument Serif", fontSize: 40, color: cWhite, bold: false });
+  s11.addText("Stay for panels on AI's impact on climate and energy and project demos from The Upskilling Labs community.", { x: 0.5, y: 2.5, w: 8.5, h: 1.5, fontFace: "IBM Plex Sans", fontSize: 16, color: cWhite });
 
   pptx.writeFile({ fileName: "HCQ_Spring_Forum_Presentation.pptx" });
   } catch (err) {
-    alert(‘Download failed: ‘ + err.message);
+    alert('Download failed: ' + err.message);
     console.error(err);
   }
 }
