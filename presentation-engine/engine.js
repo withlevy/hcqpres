@@ -1,13 +1,16 @@
 // --- GENERATE WIPE TAPES ---
-// Create 40 tapes to perfectly cover 200vmax diagonal space
+// Create 20 tapes per rotator (10.2vmax each = 204vmax) for dual-axis woven grid coverage
 document.addEventListener('DOMContentLoaded', () => {
-    const rotator = document.getElementById('wipe-rotator');
-    for (let i = 0; i < 40; i++) {
+    const rotatorA = document.getElementById('wipe-rotator-a');
+    const rotatorB = document.getElementById('wipe-rotator-b');
+    for (let i = 0; i < 20; i++) {
         const isEven = i % 2 === 0;
-        const tape = document.createElement('div');
-        tape.className = `wipe-tape ${isEven ? 'even tape-white' : 'odd tape-carbon'}`;
-        tape.innerHTML = `<div class="ticker-track ${isEven ? 'reverse' : ''}"><span></span><span></span></div>`;
-        rotator.appendChild(tape);
+        [rotatorA, rotatorB].forEach(rotator => {
+            const tape = document.createElement('div');
+            tape.className = `wipe-tape ${isEven ? 'even tape-white' : 'odd tape-carbon'}`;
+            tape.innerHTML = `<div class="ticker-track ${isEven ? 'reverse' : ''}"><span></span><span></span></div>`;
+            rotator.appendChild(tape);
+        });
     }
     updateTickerContent();
     initContinuousTickers();
@@ -29,7 +32,7 @@ function initContinuousTickers() {
     if (!tracks.length) return;
     tracks.forEach((track, index) => {
         // Crawl speeds (extremely slow base)
-        const durations = [60000, 75000, 55000, 65000];
+        const durations = [600000, 750000, 550000, 650000];
         const isReverse = track.classList.contains('reverse');
         let anim = track.animate([
             { transform: isReverse ? 'translateX(-50%)' : 'translateX(0)' },
