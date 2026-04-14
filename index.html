@@ -31,19 +31,33 @@
 
   <div class="ambient-bg">
     <div class="ambient-color-1"></div><div class="ambient-color-2"></div>
-    
-    <div class="ambient-tickers-wrapper z-back">
-      <div class="tape tape-ambient tape-carbon tape-c1"><div class="ticker-track"><span></span><span></span></div></div>
-      <div class="tape tape-ambient tape-white tape-c2"><div class="ticker-track reverse"><span></span><span></span></div></div>
+
+    <!-- Stratum 1: DEEP BACKGROUND — large, ghostly atmospheric haze -->
+    <div class="ambient-tickers-wrapper z-deep">
+      <div class="tape tape-ambient tape-carbon tape-d1"><div class="ticker-track"><span></span><span></span></div></div>
+      <div class="tape tape-ambient tape-white tape-d2"><div class="ticker-track reverse"><span></span><span></span></div></div>
     </div>
-    
+
+    <!-- Marginalia: handwritten human-touch layer, deep in the stack -->
+    <div class="ambient-marginalia-wrapper"></div>
+
+    <!-- Stratum 2: MIDGROUND — readable texture -->
+    <div class="ambient-tickers-wrapper z-mid">
+      <div class="tape tape-ambient tape-white tape-m1"><div class="ticker-track"><span></span><span></span></div></div>
+      <div class="tape tape-ambient tape-carbon tape-m2"><div class="ticker-track reverse"><span></span><span></span></div></div>
+      <div class="tape tape-ambient tape-white tape-m3"><div class="ticker-track"><span></span><span></span></div></div>
+    </div>
+
+    <!-- Static knockout text sits between mid and fore -->
     <div class="ambient-static-text">
       HUMAN<br>CAPITAL<br>QUARTERLY
     </div>
-    
-    <div class="ambient-tickers-wrapper z-front">
-      <div class="tape tape-ambient tape-white tape-c3"><div class="ticker-track"><span></span><span></span></div></div>
-      <div class="tape tape-ambient tape-carbon tape-c4"><div class="ticker-track reverse"><span></span><span></span></div></div>
+
+    <!-- Stratum 3: EXTREME FOREGROUND — small, crisp, intimate -->
+    <div class="ambient-tickers-wrapper z-fore">
+      <div class="tape tape-ambient tape-carbon tape-f1"><div class="ticker-track reverse"><span></span><span></span></div></div>
+      <div class="tape tape-ambient tape-white tape-f2"><div class="ticker-track"><span></span><span></span></div></div>
+      <div class="tape tape-ambient tape-carbon tape-f3"><div class="ticker-track reverse"><span></span><span></span></div></div>
     </div>
   </div>
 
