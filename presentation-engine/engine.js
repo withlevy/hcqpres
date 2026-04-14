@@ -205,8 +205,8 @@ function toggleAmbient() {
           wipeOverlay.classList.remove('wiping-out');
           wipeOverlay.classList.remove('active');
           isWiping = false;
-      }, 1900); // wipe-duration (1800) + buffer (100)
-  }, 1900);   // wipe-duration (1800) + max stagger (252) - overlap (150)
+      }, 5600); // wipe-duration (5400) + buffer (200)
+  }, 5600);   // wipe-duration (5400) + max stagger (252) - overlap (50)
 }
 
 function toggleFullScreen() {
