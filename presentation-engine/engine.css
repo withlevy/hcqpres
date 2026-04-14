@@ -358,8 +358,7 @@ ul.agenda-list li { display: flex; align-items: baseline; margin-bottom: var(--s
    RESPONSIVE LOGOS
 ═══════════════════════════════════════════════ */
 .title-logo-bar {
-  position: absolute; top: var(--sp-4); left: var(--sp-6);
-  display: flex; align-items: center; gap: var(--sp-2); z-index: 50;
+  display: flex; align-items: center; gap: var(--sp-2);
 }
 /* Logos scaled up for LED stage visibility */
 .logo { max-height: var(--sp-3); opacity: 0.9; transition: filter 0.8s ease; }
