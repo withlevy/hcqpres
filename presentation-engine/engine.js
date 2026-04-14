@@ -103,9 +103,9 @@ function burstSpeed() {
     if (decayInterval) clearInterval(decayInterval);
     if (spinUpInterval) clearInterval(spinUpInterval);
 
-    const peakRate = 60;
-    const spinUpDuration = 180;   // ms to reach peak (fast spin-up)
-    const spinUpSteps = 6;
+    const peakRate = 25;
+    const spinUpDuration = 300;   // ms to reach peak (gentle spin-up)
+    const spinUpSteps = 8;
     const spinUpTick = spinUpDuration / spinUpSteps;
 
     let step = 0;
@@ -125,7 +125,7 @@ function burstSpeed() {
             // Phase 2: Wind-down — exponential decay + linear drag (heavy flywheel friction)
             let elapsed = 0;
             const decayTick = 40;
-            const halfLife = 600; // ms — time to reach half speed
+            const halfLife = 900; // ms — time to reach half speed (slower wind-down)
 
             decayInterval = setInterval(() => {
                 elapsed += decayTick;
@@ -205,8 +205,8 @@ function toggleAmbient() {
           wipeOverlay.classList.remove('wiping-out');
           wipeOverlay.classList.remove('active');
           isWiping = false;
-      }, 1100); // wipe-duration (1050) + buffer (50)
-  }, 1100);   // wipe-duration (1050) + max stagger (252) - overlap (200)
+      }, 1900); // wipe-duration (1800) + buffer (100)
+  }, 1900);   // wipe-duration (1800) + max stagger (252) - overlap (150)
 }
 
 function toggleFullScreen() {
