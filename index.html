@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HCQ Spring Forum - Swiss Tape Wipe Stage</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400&family=IBM+Plex+Mono:wght@400&family=IBM+Plex+Sans:wght@300;400;600&family=Overpass:wght@700;800;900&family=Instrument+Serif:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/gh/gitbrent/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+
+<link rel="stylesheet" href="presentation-engine/engine.css">
+</head>
+<body>
+
+<div id="ui-controls">
+  <button class="btn-ui" onclick="toggleFullScreen()">Fullscreen</button>
+  <button class="btn-ui" onclick="toggleAmbient()">Toggle Ambient (Space)</button>
+  <button class="btn-ui" onclick="downloadPPTX()">Download PPTX</button>
+</div>
+
+<div id="presentation">
+  <div class="grain-overlay"></div>
+
+  <div id="wipe-overlay">
+    <div class="wipe-rotator" id="wipe-rotator">
+      </div>
+  </div>
+
+  <div class="ambient-bg">
+    <div class="ambient-color-1"></div><div class="ambient-color-2"></div>
+    
+    <div class="ambient-tickers-wrapper z-back">
+      <div class="tape tape-ambient tape-carbon tape-c1"><div class="ticker-track"><span></span><span></span></div></div>
+      <div class="tape tape-ambient tape-white tape-c2"><div class="ticker-track reverse"><span></span><span></span></div></div>
+    </div>
+    
+    <div class="ambient-static-text">
+      HUMAN<br>CAPITAL<br>QUARTERLY
+    </div>
+    
+    <div class="ambient-tickers-wrapper z-front">
+      <div class="tape tape-ambient tape-white tape-c3"><div class="ticker-track"><span></span><span></span></div></div>
+      <div class="tape tape-ambient tape-carbon tape-c4"><div class="ticker-track reverse"><span></span><span></span></div></div>
+    </div>
+  </div>
+
+  <div class="logo-bar">
+    <img src="logos/DCPL Knock-Out Logo.png" class="logo" alt="DCPL">
+    <div class="logo-divider"></div>
+    <img src="logos/Group 35.png" class="logo" alt="Levy">
+  </div>
+
+  <div class="slide bg-white active" data-ticker="THE SPRING FORUM &mdash; APRIL 14 &mdash; WASHINGTON DC &mdash; ">
+    <div class="safe-zone intro-content">
+      <div class="hero-stack">
+        <span class="hw">THE</span>
+        <span class="hop">Human Capital</span>
+        <span class="hw">SPRING</span>
+        <span class="hop">Quarterly</span>
+        <span class="hw">FORUM</span>
+      </div>
+      <div class="hero-footer mono-meta" style="color: var(--carbon); margin-bottom:0;">
+        <div>April 14, 2026<br>MLK Jr Memorial Library</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide bg-carbon" data-ticker="TODAY'S SCHEDULE &mdash; AGENDA &mdash; ">
+    <div class="safe-zone intro-content">
+      <div class="slide-header-group">
+        <h2 class="title-serif" style="margin-bottom: 0;">Agenda</h2>
+      </div>
+      <ul class="agenda-list">
+        <li><div class="time-col mono-meta mono-blue" style="margin-bottom:0;">12:30 – 12:45 PM</div><div class="event-col">Opening Remarks</div></li>
+        <li><div class="time-col mono-meta mono-blue" style="margin-bottom:0;">12:45 – 1:15 PM</div><div class="event-col">Fireside Chat</div></li>
+        <li><div class="time-col mono-meta mono-blue" style="margin-bottom:0;">1:15 – 2:00 PM</div><div class="event-col">Employer Skills Demand</div></li>
+        <li><div class="time-col mono-meta mono-red" style="margin-bottom:0;">2:00 – 2:15 PM</div><div class="event-col">BREAK 1</div></li>
+        <li><div class="time-col mono-meta mono-blue" style="margin-bottom:0;">2:15 – 3:15 PM</div><div class="event-col">Personal LinkedIn Optimization</div></li>
+        <li><div class="time-col mono-meta mono-blue" style="margin-bottom:0;">3:30 – 4:30 PM</div><div class="event-col">Live Build Workshop</div></li>
+      </ul>
+      <div class="marginalia" style="bottom: 0; right: var(--sp-4); max-width: var(--sp-12);">Restrooms on floors 2-5!</div>
+    </div>
+  </div>
+
+  <div class="slide bg-white" data-ticker="OPENING REMARKS &mdash; HOW TO USE THE DAY &mdash; ">
+    <div class="safe-zone intro-content">
+      <div class="slide-header-group">
+        <div class="slide-meta mono-red">12:30 PM</div>
+        <h2 class="title-sys">Opening</h2>
+        <div class="subtitle">How to use the day</div>
+      </div>
+      <div class="speaker-block">
+        <div class="speaker-name">Ann Marie Guzzi &amp; Brendan Whitaker</div>
+        <div class="speaker-title">Levy Strategic Design</div>
+      </div>
+      <div class="speaker-block">
+        <div class="speaker-name">Chelsea Kirkland</div>
+        <div class="speaker-title">DC Public Library</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide bg-white" data-ticker="FIRESIDE CHAT &mdash; CLARA HASKELL BOTSTEIN &mdash; ">
+    <div class="safe-zone intro-content">
+      <div class="slide-header-group">
+        <div class="slide-meta mono-red">12:45 PM</div>
+        <h2 class="title-sys">Fireside Chat</h2>
+        <div class="subtitle">Future of work in the capital region</div>
+      </div>
+      <div class="speaker-block">
+        <div class="speaker-name">Clara Haskell Botstein</div>
+        <div class="speaker-title">Chief of Staff, DC's Office of the Deputy Mayor for Education</div>
+      </div>
+      <div class="slide-separator"><i>in conversation with</i></div>
+      <div class="speaker-block">
+        <div class="speaker-name">Ann Marie Guzzi</div>
+        <div class="speaker-title">Levy Strategic Design</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide bg-white" data-ticker="EMPLOYER SKILLS DEMAND &mdash; HEALTHCARE & ENERGY &mdash; ">
+    <div class="safe-zone intro-content">
+      <div class="slide-header-group">
+        <div class="slide-meta mono-red">1:15 PM</div>
+        <h2 class="title-sys">Employer<br>Skills Demand</h2>
+        <div class="subtitle">In healthcare and energy</div>
+      </div>
+      <div class="speaker-block">
+        <div class="speaker-name">Christian Jones</div>
+        <div class="speaker-title">DC Hospital Association</div>
+      </div>
+      <div class="speaker-block">
+        <div class="speaker-name">Brittny Pinto</div>
+        <div class="speaker-title">Pepco Initiatives</div>
+      </div>
+      <div class="slide-separator"><i>moderated by</i></div>
+      <div class="speaker-block">
+        <div class="speaker-name">Pat Philippe</div>
+        <div class="speaker-title">Workforce Investment Council</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide bg-blue" data-ticker="15 MINUTE BREAK &mdash; NETWORKING &mdash; ">
+    <div class="safe-zone intro-content">
+      <div class="center-punch">
+        <div class="slide-meta" style="color: var(--carbon);">2:00 PM</div>
+        <h2 class="title-sys giant">15 MINUTE<br>BREAK</h2>
+      </div>
+      <div class="marginalia" style="bottom: 0; left: var(--sp-4); max-width: var(--sp-12); color: var(--red); transform: rotate(2deg);">
+        Visit Marianne’s Cafe for DC Central Kitchen coffee!
+      </div>
+    </div>
+  </div>
+
+  <div class="slide bg-white" data-ticker="PERSONAL LINKEDIN OPTIMIZATION &mdash; WORKSHOP &mdash; ">
+    <div class="safe-zone intro-content">
+      <div class="slide-header-group">
+        <div class="slide-meta mono-red">2:15 PM</div>
+        <h2 class="title-sys">Personal LinkedIn<br>Optimization</h2>
+      </div>
+      <div class="speaker-block">
+        <div class="speaker-name">Javi Calderon and Lea Berry</div>
+        <div class="speaker-title">Educators and Career Coaches</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide bg-red" data-ticker="15 MINUTE BREAK &mdash; NETWORKING &mdash; ">
+    <div class="safe-zone intro-content">
+      <div class="center-punch">
+        <div class="slide-meta" style="color: var(--white);">3:15 PM</div>
+        <h2 class="title-sys giant" style="color: var(--white);">15 MINUTE<br>BREAK</h2>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide bg-white" data-ticker="LIVE BUILD WORKSHOP &mdash; CIVIC TECH DC &mdash; ">
+    <div class="safe-zone intro-content">
+      <div class="slide-header-group">
+        <div class="slide-meta mono-red">3:30 PM</div>
+        <h2 class="title-sys">Live Build<br>Workshop</h2>
+        <div class="subtitle">Solving a real-world problem with AI</div>
+      </div>
+      <div class="speaker-block">
+        <div class="speaker-name">Civic Tech DC</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide bg-carbon" data-ticker="UP NEXT &mdash; THE UPSKILLING LABS SHOWCASE &mdash; ">
+    <div class="safe-zone intro-content">
+      <div class="slide-header-group">
+        <div class="slide-meta mono-red">UP NEXT</div>
+        <h2 class="title-serif">The Upskilling Labs’<br>Showcase Summit</h2>
+      </div>
+      <p style="font-family: var(--body); font-weight: 300; font-size: calc(var(--baseline)*1.1); line-height: 1.5; max-width: 85%; margin-top: 0; color: var(--white);">
+        Stay for panels on AI’s impact on climate and energy and project demos from The Upskilling Labs community.
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<script src="presentation-engine/engine.js"></script>
+</body>
+</html>
