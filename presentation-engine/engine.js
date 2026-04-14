@@ -74,11 +74,12 @@ function updateTickerContent() {
 function showSlide(index) {
   if (isWiping) return; // Lock navigation if transition is running
 
+  currentSlide = index;
+  if (currentSlide >= slides.length) currentSlide = 0;
+  if (currentSlide < 0) currentSlide = slides.length - 1;
   slides.forEach(slide => slide.classList.remove('active'));
-  if(index >= slides.length) currentSlide = 0;
-  if(index < 0) currentSlide = slides.length - 1;
   slides[currentSlide].classList.add('active');
-  
+
   if (presentation.classList.contains('ambient')) {
       presentation.classList.remove('ambient');
   }
@@ -118,20 +119,25 @@ function toggleFullScreen() {
 
 document.addEventListener('keydown', (e) => {
   if (isWiping) return; // Lock key input during wipe animation
-  if (e.key === 'ArrowRight') { currentSlide++; showSlide(currentSlide); }
-  else if (e.key === 'ArrowLeft') { currentSlide--; showSlide(currentSlide); }
+  if (e.key === 'ArrowRight') { showSlide(currentSlide + 1); }
+  else if (e.key === 'ArrowLeft') { showSlide(currentSlide - 1); }
   else if (e.key === ' ' || e.code === 'Space') { e.preventDefault(); toggleAmbient(); }
 });
 
 document.addEventListener('click', (e) => {
   if (isWiping) return; 
   if(e.target.tagName.toLowerCase() === 'button') return; 
-  if(e.clientX > window.innerWidth / 2) { currentSlide++; showSlide(currentSlide); }
-  else { currentSlide--; showSlide(currentSlide); }
+  if(e.clientX > window.innerWidth / 2) { showSlide(currentSlide + 1); }
+  else { showSlide(currentSlide - 1); }
 });
 
 // --- PPTX GENERATION ---
 function downloadPPTX() {
+  if (typeof PptxGenJS === 'undefined') {
+    alert('Presentation library not loaded. Please check your internet connection and try again.');
+    return;
+  }
+  try {
   let pptx = new PptxGenJS();
   pptx.layout = 'LAYOUT_16x9'; 
   const cWhite = 'F9F9F8', cCarbon = '121212', cRed = 'E4002B', cBlue = '41B6E6';
@@ -217,4 +223,8 @@ function downloadPPTX() {
   s10.addText("Stay for panels on AI’s impact on climate and energy and project demos from The Upskilling Labs community.", { x: 0.5, y: 2.5, w: 8.5, h: 1.5, fontFace: "IBM Plex Sans", fontSize: 16, color: cWhite });
 
   pptx.writeFile({ fileName: "HCQ_Spring_Forum_Presentation.pptx" });
+  } catch (err) {
+    alert('Download failed: ' + err.message);
+    console.error(err);
+  }
 }

@@ -71,10 +71,14 @@ body {
 ═══════════════════════════════════════════════ */
 .slide-header-group { margin-bottom: var(--sp-3); }
 
-.slide-meta { 
-  font-family: var(--mono); font-weight: 400; text-transform: uppercase; 
-  letter-spacing: 0.08em; font-size: calc(var(--baseline) * 0.7); line-height: 1; 
+.slide-meta {
+  font-family: var(--mono); font-weight: 400; text-transform: uppercase;
+  letter-spacing: 0.08em; font-size: calc(var(--baseline) * 0.7); line-height: 1;
   margin-bottom: var(--sp-05);
+}
+.mono-meta {
+  font-family: var(--mono); font-weight: 400; text-transform: uppercase;
+  letter-spacing: 0.08em; font-size: calc(var(--baseline) * 0.7); line-height: 1;
 }
 .mono-red { color: var(--red); }
 .mono-blue { color: var(--blue); }
@@ -162,7 +166,7 @@ ul.agenda-list li { display: flex; align-items: baseline; margin-bottom: var(--s
   position: absolute; inset: 0; z-index: 1; background: var(--carbon); 
   opacity: 0; transition: opacity 0.2s ease; pointer-events: none; overflow: hidden;
 }
-#presentation.ambient .ambient-bg { opacity: 1; }
+#presentation.ambient .ambient-bg { opacity: 1; z-index: 25; }
 
 .ambient-color-1, .ambient-color-2 { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1;}
 .ambient-color-1 { background: var(--blue); animation: fadeBlue 24s infinite; }
