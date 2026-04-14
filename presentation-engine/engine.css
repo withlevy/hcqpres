@@ -357,8 +357,8 @@ ul.agenda-list li { display: flex; align-items: baseline; margin-bottom: var(--s
 /* ═══════════════════════════════════════════════
    RESPONSIVE LOGOS
 ═══════════════════════════════════════════════ */
-.logo-bar {
-  position: absolute; top: var(--sp-2); left: 50%; transform: translateX(-50%);
+.title-logo-bar {
+  position: absolute; top: var(--sp-4); left: var(--sp-6);
   display: flex; align-items: center; gap: var(--sp-2); z-index: 50;
 }
 /* Logos scaled up for LED stage visibility */
@@ -366,8 +366,7 @@ ul.agenda-list li { display: flex; align-items: baseline; margin-bottom: var(--s
 .logo-divider { width: 2px; height: calc(var(--sp-3)*1.2); transition: background 0.8s ease; }
 
 /* Logo color logic: JS sets data-slide-bg="light"|"dark" on #presentation.
-   .logo-bar sits outside the slide DOM so descendant selectors like
-   .bg-white .logo cannot reach it — attribute rules on #presentation work correctly. */
+   .title-logo-bar sits inside the title slide which has data-slide-bg logic attached to presentation */
 #presentation[data-slide-bg="light"] .logo { filter: invert(1); }
 #presentation[data-slide-bg="light"] .logo-divider { background: var(--carbon); opacity: 0.3; }
 #presentation[data-slide-bg="dark"] .logo { filter: invert(0); }
