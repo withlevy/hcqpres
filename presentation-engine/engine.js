@@ -141,8 +141,8 @@ document.addEventListener('keydown', (e) => {
 });
 
 document.addEventListener('click', (e) => {
-  if (isWiping) return; 
-  if(e.target.tagName.toLowerCase() === 'button') return; 
+  if (isWiping) return;
+  if (e.target.closest('#ui-controls')) return;
   if(e.clientX > window.innerWidth / 2) { showSlide(currentSlide + 1); }
   else { showSlide(currentSlide - 1); }
 });
@@ -252,3 +252,9 @@ function downloadPPTX() {
     console.error(err);
   }
 }
+
+// Expose functions globally so inline onclick handlers work regardless of
+// module scope or script-loading order after external merges
+window.toggleFullScreen = toggleFullScreen;
+window.toggleAmbient = toggleAmbient;
+window.downloadPPTX = downloadPPTX;
