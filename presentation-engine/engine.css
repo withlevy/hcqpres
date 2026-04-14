@@ -25,7 +25,7 @@
   --sp-8: calc(var(--baseline) * 8);    
   --sp-12: calc(var(--baseline) * 12);  
 
-  --hfs: var(--sp-6); 
+  --hfs: var(--sp-8); /* scaled up for LED stage impact */
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -56,11 +56,13 @@ body {
 .slide {
   position: absolute; inset: 0; opacity: 0; transition: opacity 0.1s ease;
   pointer-events: none; z-index: 10; display: flex; flex-direction: column;
+  justify-content: flex-start; /* top-anchor content to enforce LED safe zone */
 }
 .slide.active { opacity: 1; pointer-events: auto; z-index: 20; }
 
+/* Content is constrained to the top 80% — the bottom 20% is the LED stage floor dead zone */
 .safe-zone {
-  width: 100%; height: 75%; 
+  width: 100%; height: 80%;
   padding: var(--sp-4) var(--sp-6);
   display: flex; flex-direction: column; justify-content: center;
   position: relative; z-index: 15;
@@ -96,10 +98,10 @@ body {
   margin-bottom: var(--sp-05); color: var(--carbon);
 }
 
-.subtitle { 
-  font-family: var(--serif); font-weight: 400; font-style: normal; 
-  font-size: calc(var(--sp-1) * 1.4); line-height: 1.2; 
-  opacity: 0.85; margin-bottom: 0; color: var(--carbon);
+.subtitle {
+  font-family: var(--serif); font-weight: 400; font-style: normal;
+  font-size: calc(var(--sp-1) * 1.4); line-height: 1.2;
+  opacity: 1; margin-bottom: 0; color: var(--carbon);
 }
 
 .speaker-block { margin-bottom: var(--sp-1-5); }
@@ -110,17 +112,17 @@ body {
   font-size: calc(var(--sp-1) * 1.15); line-height: 1.1; 
   margin-bottom: var(--sp-025); color: var(--carbon); 
 }
-.speaker-title { 
-  font-family: var(--mono); font-weight: 400; text-transform: uppercase; 
-  letter-spacing: 0.08em; opacity: 0.65; 
-  font-size: calc(var(--baseline) * 0.6); line-height: 1.2; 
+.speaker-title {
+  font-family: var(--mono); font-weight: 400; text-transform: uppercase;
+  letter-spacing: 0.08em; opacity: 0.9; /* raised from 0.65 — LED walls require high contrast */
+  font-size: calc(var(--baseline) * 0.6); line-height: 1.2;
   margin-bottom: 0; color: var(--carbon);
 }
 
 .slide-separator {
   font-family: var(--serif); font-weight: 400; font-style: normal;
   font-size: calc(var(--sp-1) * 1.2); line-height: 1;
-  color: var(--carbon); opacity: 0.8; margin-bottom: var(--sp-1-5);
+  color: var(--carbon); opacity: 0.9; margin-bottom: var(--sp-1-5);
 }
 
 .marginalia {
@@ -156,7 +158,8 @@ ul.agenda-list li { display: flex; align-items: baseline; margin-bottom: var(--s
 ═══════════════════════════════════════════════ */
 .intro-content {
   opacity: 1; transition: opacity 0.4s ease, transform 0.4s ease;
-  transform: translateY(0); height: 100%; display: flex; flex-direction: column; justify-content: center;
+  transform: translateY(0); height: 80%; display: flex; flex-direction: column; justify-content: center;
+  /* height matches safe-zone so content stays in the top 80% LED safe zone */
 }
 #presentation.ambient .intro-content {
   opacity: 0; transform: translateY(calc(var(--baseline) * -2)); pointer-events: none;
@@ -249,17 +252,22 @@ ul.agenda-list li { display: flex; align-items: baseline; margin-bottom: var(--s
    RESPONSIVE LOGOS
 ═══════════════════════════════════════════════ */
 .logo-bar {
-  position: absolute; top: var(--sp-3); left: 50%; transform: translateX(-50%);
-  display: flex; align-items: center; gap: var(--sp-1-5); z-index: 50;
+  position: absolute; top: var(--sp-2); left: 50%; transform: translateX(-50%);
+  display: flex; align-items: center; gap: var(--sp-2); z-index: 50;
 }
-.logo { max-height: var(--sp-1-5); opacity: 0.9; transition: filter 0.8s ease; }
-.logo-divider { width: 2px; height: calc(var(--sp-1-5)*1.2); transition: background 0.8s ease; }
+/* Logos scaled up for LED stage visibility */
+.logo { max-height: var(--sp-3); opacity: 0.9; transition: filter 0.8s ease; }
+.logo-divider { width: 2px; height: calc(var(--sp-3)*1.2); transition: background 0.8s ease; }
 
-.bg-white .logo, .bg-blue .logo { filter: invert(1); }
-.bg-white .logo-divider, .bg-blue .logo-divider { background: var(--carbon); opacity: 0.3; }
-.bg-carbon .logo, .bg-red .logo { filter: invert(0); }
-.bg-carbon .logo-divider, .bg-red .logo-divider { background: var(--white); opacity: 0.3; }
+/* Logo color logic: JS sets data-slide-bg="light"|"dark" on #presentation.
+   .logo-bar sits outside the slide DOM so descendant selectors like
+   .bg-white .logo cannot reach it — attribute rules on #presentation work correctly. */
+#presentation[data-slide-bg="light"] .logo { filter: invert(1); }
+#presentation[data-slide-bg="light"] .logo-divider { background: var(--carbon); opacity: 0.3; }
+#presentation[data-slide-bg="dark"] .logo { filter: invert(0); }
+#presentation[data-slide-bg="dark"] .logo-divider { background: var(--white); opacity: 0.3; }
 
+/* Ambient mode always shows white logos (carbon background) */
 #presentation.ambient .logo { filter: invert(0); opacity: 0.9; }
 #presentation.ambient .logo-divider { background: var(--white); opacity: 0.3; }
 
@@ -272,3 +280,42 @@ ul.agenda-list li { display: flex; align-items: baseline; margin-bottom: var(--s
   cursor: pointer; transition: all 0.2s;
 }
 .btn-ui:hover { background: var(--red); border-color: var(--red); }
+
+/* ═══════════════════════════════════════════════
+   PRESENTED BY SLIDE
+═══════════════════════════════════════════════ */
+.presented-by-center {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  height: 100%; gap: var(--sp-3);
+}
+.presented-logos-row {
+  display: flex; align-items: center; gap: var(--sp-6);
+}
+.presented-logo { max-height: var(--sp-8); width: auto; filter: invert(0); }
+.presented-divider { width: 2px; height: calc(var(--sp-8) * 1.1); background: rgba(249,249,248,0.35); }
+.presented-by-text {
+  font-family: var(--body); font-weight: 300; font-size: calc(var(--baseline) * 1.3);
+  color: rgba(249,249,248,0.75); text-align: center; letter-spacing: 0.04em;
+}
+
+/* ═══════════════════════════════════════════════
+   REDUCED MOTION (presenter comfort)
+═══════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  /* Stop animated color shifts in ambient mode */
+  .ambient-color-1, .ambient-color-2 { animation: none !important; opacity: 0; }
+
+  /* Pause CSS-driven ticker scrolling */
+  .ticker-track { animation-play-state: paused !important; }
+
+  /* Replace sliding tape wipe with a simple opacity crossfade */
+  .wipe-tape { transform: translateX(0) !important; transition: opacity 0.35s ease !important; }
+  #wipe-overlay.wiping-in .wipe-tape.odd,
+  #wipe-overlay.wiping-in .wipe-tape.even {
+    animation: none !important; opacity: 1;
+  }
+  #wipe-overlay.wiping-out .wipe-tape.odd,
+  #wipe-overlay.wiping-out .wipe-tape.even {
+    animation: none !important; opacity: 0;
+  }
+}
