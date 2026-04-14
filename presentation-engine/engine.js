@@ -1,6 +1,6 @@
 // --- GENERATE WIPE TAPES ---
 // Create 40 tapes to perfectly cover 200vmax diagonal space
-window.onload = () => {
+document.addEventListener('DOMContentLoaded', () => {
     const rotator = document.getElementById('wipe-rotator');
     for (let i = 0; i < 40; i++) {
         const isEven = i % 2 === 0;
@@ -9,9 +9,9 @@ window.onload = () => {
         tape.innerHTML = `<div class="ticker-track ${isEven ? 'reverse' : ''}"><span></span><span></span></div>`;
         rotator.appendChild(tape);
     }
-    updateTickerContent(); 
+    updateTickerContent();
     initContinuousTickers();
-};
+});
 
 // --- JAVASCRIPT ANIMATION ENGINE ---
 let tickerAnims = [];
@@ -19,6 +19,7 @@ let decayInterval = null;
 
 function initContinuousTickers() {
     const tracks = document.querySelectorAll('.tape-ambient .ticker-track, .wipe-tape .ticker-track');
+    if (!tracks.length) return;
     tracks.forEach((track, index) => {
         // Crawl speeds (extremely slow base)
         const durations = [60000, 75000, 55000, 65000];
@@ -32,6 +33,7 @@ function initContinuousTickers() {
 }
 
 function burstSpeed() {
+    if (!tickerAnims.length) return;
     if (decayInterval) clearInterval(decayInterval);
     
     tickerAnims.forEach(anim => {
@@ -216,4 +218,3 @@ function downloadPPTX() {
 
   pptx.writeFile({ fileName: "HCQ_Spring_Forum_Presentation.pptx" });
 }
-</script>
