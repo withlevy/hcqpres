@@ -64,7 +64,7 @@ body {
 .safe-zone {
   width: 100%; height: 80%;
   padding: var(--sp-4) var(--sp-6);
-  display: flex; flex-direction: column; justify-content: center;
+  display: flex; flex-direction: column; justify-content: flex-start;
   position: relative; z-index: 15;
 }
 
@@ -141,8 +141,8 @@ body {
 .hw { font-family: var(--sys); font-weight: 900; text-transform: uppercase; letter-spacing: -0.04em; color: var(--blue); font-size: var(--hfs); line-height: var(--hfs); }
 .hop {
   font-family: var(--serif); font-weight: 400; font-style: italic; mix-blend-mode: multiply; color: var(--red);
-  font-size: calc(var(--hfs) * 0.52); line-height: var(--hfs); 
-  margin-top: calc(var(--hfs) * -0.28); margin-bottom: calc(var(--hfs) * -0.28);
+  font-size: calc(var(--hfs) * 0.62); line-height: var(--hfs);
+  margin-top: calc(var(--hfs) * -0.38); margin-bottom: calc(var(--hfs) * -0.38);
 }
 .hero-footer { position: absolute; bottom: 0; left: var(--sp-6); right: var(--sp-6); display: flex; justify-content: space-between; align-items: flex-end;}
 
